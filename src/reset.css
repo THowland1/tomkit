@@ -46,6 +46,7 @@ table {
 input,
 textarea {
 	-webkit-user-select: auto;
+	min-width: 0;
 }
 
 /* revert the 'white-space' property for textarea elements on Safari */
