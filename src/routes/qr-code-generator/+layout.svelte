@@ -103,6 +103,10 @@
 		margin: 0 auto;
 		padding: 32px;
 		overflow: auto;
+		display: flex;
+		flex-direction: column;
+
+		height: 100%;
 	}
 	.switcher {
 		background-color: var(--color-bg-paper);

@@ -4,11 +4,6 @@
 	const content = getContentContext();
 	const defaultContent = 'Edit your text here';
 	$content = defaultContent;
-	$: {
-		if ($content === '') {
-			$content = defaultContent;
-		}
-	}
 </script>
 
 <div class="whole-thing">
@@ -31,7 +26,6 @@
 	}
 	.input {
 		line-height: 1.5;
-		font-size: 2rem;
 		color: #253956;
 		border-bottom: solid 1px var(--color-muted-text-on-light);
 	}

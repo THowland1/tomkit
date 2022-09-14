@@ -12,6 +12,7 @@
 	import ArrowDownTray from './icons/ArrowDownTray.svelte';
 	import DocumentDuplicate from './icons/DocumentDuplicate.svelte';
 	import Slider from './Slider.svelte';
+	import ArrowsPointingOut from './icons/ArrowsPointingOut.svelte';
 	let color = '#ffffff';
 	let background = '#000000';
 	let showPadding = false;
@@ -23,7 +24,7 @@
 	const content = getContentContext();
 
 	$: options = {
-		content: $content || 'default',
+		content: $content || "It's empty, what do you expect?",
 		background: showBg ? background : 'transparent',
 		color: showColor ? color : 'white',
 		padding: showPadding ? Math.max(padding, 0) : 0,
@@ -96,7 +97,7 @@
 			</div>
 			<div class="field slider-field" class:disabled={!showWidth}>
 				<div class="field-icon">
-					<SquareInSquare />
+					<ArrowsPointingOut />
 				</div>
 				<div class="field-inputs">
 					<div class="slider-container">

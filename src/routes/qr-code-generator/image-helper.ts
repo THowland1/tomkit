@@ -15,7 +15,7 @@ export default class ImageHelper {
 		const svgurl = this.getSvgUrl(svgstring);
 		this.downloadObjectURL(svgurl, name);
 	}
-	async downloadPNG(svgstring: string, name = 'download.svg') {
+	async downloadPNG(svgstring: string, name = 'download.png') {
 		const svgurl = this.getSvgUrl(svgstring);
 		const pngurl = await this.svgUrlToPngUrl(svgurl);
 		this.downloadObjectURL(pngurl, name);
