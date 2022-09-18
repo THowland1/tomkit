@@ -13,6 +13,7 @@
 	import DocumentDuplicate from './icons/DocumentDuplicate.svelte';
 	import Slider from './Slider.svelte';
 	import ArrowsPointingOut from './icons/ArrowsPointingOut.svelte';
+	import { resettingWritable } from './resetting-writable';
 	let color = '#ffffff';
 	let background = '#000000';
 	let showPadding = false;
@@ -22,6 +23,9 @@
 	let padding = 3;
 	let width = 128;
 	const content = getContentContext();
+
+	let svgCopied = resettingWritable(false, 2000);
+	let pngCopied = resettingWritable(false, 2000);
 
 	$: options = {
 		content: $content || "It's empty, what do you expect?",
@@ -125,12 +129,32 @@
 	<button class="button secondary" on:click={() => imagehelper.downloadSVG(svgstring)}
 		><ArrowDownTray />Download SVG</button
 	>
-	<button class="button primary" on:click={() => imagehelper.copyPNGToClipboard(svgstring)}
-		><DocumentDuplicate />Copy PNG</button
+	<button
+		class="button primary"
+		on:click={() => {
+			imagehelper.copyPNGToClipboard(svgstring);
+			$pngCopied = true;
+		}}
 	>
-	<button class="button secondary" on:click={() => imagehelper.copySVGToClipboard(svgstring)}
-		><DocumentDuplicate />Copy SVG</button
+		{#if $pngCopied}
+			Copied PNG!
+		{:else}
+			<DocumentDuplicate />Copy PNG
+		{/if}
+	</button>
+	<button
+		class="button secondary"
+		on:click={() => {
+			imagehelper.copySVGToClipboard(svgstring);
+			$svgCopied = true;
+		}}
 	>
+		{#if $svgCopied}
+			Copied SVG!
+		{:else}
+			<DocumentDuplicate />Copy SVG
+		{/if}
+	</button>
 </div>
 
 <style lang="scss">
