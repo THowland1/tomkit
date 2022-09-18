@@ -20,7 +20,8 @@
 				region: '',
 				code: '',
 				country: ''
-			}
+			},
+			note: ''
 		};
 	}
 	type VCard = {
@@ -42,6 +43,7 @@
 			/** e.g. Postcode / Zip code */ code: string;
 			country: string;
 		};
+		note: string;
 	};
 
 	function formatVCard(value: VCard) {
@@ -60,9 +62,10 @@
 		if ([pobox, ext, street, locality, region, code, country].some(Boolean)) {
 			items.push(`ADR:${pobox};${ext};${street};${locality};${region};${code};${country}`);
 		}
+		if (value.note) items.push(`NOTE:${value.note}`);
 
 		items.push('END:VCARD');
-		return items.join('\r\n');
+		return items.map((i) => i.replaceAll('\n', '\\n')).join('\r\n');
 	}
 
 	const content = getContentContext();
@@ -73,7 +76,13 @@
 </script>
 
 <div class="whole-thing">
-	<h2 class="h2">vCard</h2>
+	<div>
+		<h2 class="h2">vCard</h2>
+		<p class="p">
+			Scannable calling card.<br />For instant "Add to Contacts" or lost-and-found stickers.<br /> Understood
+			by all mobile devices.
+		</p>
+	</div>
 	<div class="keyvalue">
 		<div class="key">
 			<label class="label" for="firstname">Name</label>
@@ -129,6 +138,26 @@
 			</div>
 		</div>
 	</div>
+	<div class="keyvalue">
+		<div class="key">
+			<label class="label" for="note">Note</label>
+		</div>
+		<div class="value">
+			<div
+				id="note"
+				contenteditable
+				class="input input-textarea"
+				on:paste={(e) => {
+					e.preventDefault();
+					document.execCommand('insertHTML', false, e.clipboardData?.getData('text/plain') ?? '');
+				}}
+				on:input={(e) => (vcard.note = e.currentTarget.innerText)}
+				placeholder="Note"
+			>
+				{vcard.note}
+			</div>
+		</div>
+	</div>
 </div>
 
 <style lang="scss">
@@ -143,8 +172,16 @@
 		color: var(--color-blue-400);
 		font-size: 3rem;
 		font-weight: 600;
+	}
+	.p {
+		color: var(--color-blue-400);
+		/* opacity: 0.5; */
+		line-height: 1;
+		font-size: clamp(1rem, 2vw, 1.15rem);
+		font-weight: 600;
 		margin-bottom: 16px;
 	}
+
 	.key {
 		flex: 1;
 		max-width: 10ch;
@@ -163,8 +200,7 @@
 	}
 	.input {
 		height: 48px;
-
-		line-height: 2.5;
+		line-height: 1.5;
 		color: #253956;
 		border-bottom: solid 1px var(--color-muted-text-on-light);
 		width: 100%;
@@ -183,6 +219,18 @@
 		&::-ms-input-placeholder {
 			/* Microsoft Edge */
 			color: var(--color-muted-text-on-light);
+		}
+
+		&.input-textarea {
+			height: auto;
+			white-space: pre;
+			min-height: 80px;
+			padding-top: 10px;
+			vertical-align: middle;
+			&:empty::after {
+				content: attr(placeholder);
+				color: var(--color-muted-text-on-light);
+			}
 		}
 	}
 	.keyvalue {

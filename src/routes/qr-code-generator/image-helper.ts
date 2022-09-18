@@ -39,6 +39,12 @@ export default class ImageHelper {
 		]);
 	}
 
+	async svgStringToPngUrl(svgstring: string) {
+		const svgurl = this.getSvgUrl(svgstring);
+		const canvas = await this.svgUrlToCanvas(svgurl);
+		return canvas.toDataURL();
+	}
+
 	private downloadObjectURL(objecturl: string, name: string) {
 		const downloadLink = this.doc.createElement('a');
 		downloadLink.href = objecturl;
@@ -71,6 +77,7 @@ export default class ImageHelper {
 		const imgPreview = this.doc.createElement('img');
 		this.doc.body.appendChild(imgPreview);
 		imgPreview.src = svgUrl;
+		imgPreview.style.opacity = '0';
 		await this.waitForOnLoad(imgPreview);
 		const canvas = this.doc.createElement('canvas');
 		canvas.width = imgPreview.clientWidth;

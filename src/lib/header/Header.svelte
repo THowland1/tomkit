@@ -10,12 +10,15 @@
 				<li class:active={$page.url.pathname === '/base-converter'}>
 					<a href="/base-converter">Base Converter</a>
 				</li>
+				<li class:active={$page.url.pathname.startsWith('/qr-code-generator')}>
+					<a href="/qr-code-generator">QR Code Generator</a>
+				</li>
 			</ul>
 		</nav>
 	</div>
 </div>
 
-<style>
+<style lang="scss">
 	.header {
 		display: flex;
 		justify-content: center;
@@ -35,7 +38,8 @@
 		justify-content: space-between;
 		background-color: black;
 		color: white;
-		max-width: 600px;
+		max-width: 1024px;
+
 		align-items: center;
 		flex: 1;
 	}
@@ -44,8 +48,12 @@
 		justify-content: space-between;
 		background-color: black;
 		color: white;
-		max-width: 600px;
+		max-width: 1024px;
 		flex: 1;
+
+		> * {
+			margin-left: 16px;
+		}
 	}
 
 	.active {

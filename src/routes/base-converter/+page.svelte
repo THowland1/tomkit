@@ -106,7 +106,7 @@
 </script>
 
 <svelte:head>
-	<title>Home</title>
+	<title>Base Converter</title>
 	<meta name="description" content="Svelte demo app" />
 </svelte:head>
 <section class="section">

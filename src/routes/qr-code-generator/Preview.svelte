@@ -14,34 +14,52 @@
 	import Slider from './Slider.svelte';
 	import ArrowsPointingOut from './icons/ArrowsPointingOut.svelte';
 	import { resettingWritable } from './resetting-writable';
+	import QrCodeIcon from './icons/QRCodeIcon.svelte';
+	import { debouncingWritable } from './debouncing-writable';
 	let color = '#ffffff';
 	let background = '#000000';
 	let showPadding = false;
 	let showColor = true;
 	let showBg = false;
 	let showWidth = false;
+	let showEclIndex = false;
 	let padding = 3;
 	let width = 128;
+	let eclIndex = 1;
 	const content = getContentContext();
 
 	let svgCopied = resettingWritable(false, 2000);
 	let pngCopied = resettingWritable(false, 2000);
 
-	$: options = {
+	const ECLS = ['L', 'M', 'Q', 'H'];
+
+	$: boptions = {
 		content: $content || "It's empty, what do you expect?",
 		background: showBg ? background : 'transparent',
 		color: showColor ? color : 'white',
 		padding: showPadding ? Math.max(padding, 0) : 0,
 		width: showWidth ? Math.max(width, 0) : 128,
-		height: showWidth ? Math.max(width, 0) : 128
+		height: showWidth ? Math.max(width, 0) : 128,
+		ecl: showEclIndex ? ECLS[eclIndex] : 'M'
 	} as QRCode.Options;
-	$: qrcode = new QRCode(options);
+	const options = debouncingWritable(boptions, 150);
+	$: {
+		$options = boptions;
+	}
+	console.log({ boptions });
+	console.log($options);
+	$: qrcode = new QRCode($options);
 	$: svgstring = qrcode.svg();
 	$: imagehelper = new ImageHelper();
+	$: pngurl = imagehelper.svgStringToPngUrl(svgstring);
 </script>
 
 <div class="qr-svg-container">
-	{@html svgstring}
+	{#await pngurl}
+		{@html svgstring}
+	{:then value}
+		<img src={value} alt="QR Code" />
+	{/await}
 </div>
 <div class="settings">
 	<Details
@@ -117,6 +135,26 @@
 				</div>
 				<div class="field-toggle">
 					<SwitchCheckbox bind:checked={showWidth} />
+				</div>
+			</div>
+			<div class="field slider-field" class:disabled={!showEclIndex}>
+				<div class="field-icon">
+					<QrCodeIcon />
+				</div>
+				<div class="field-inputs">
+					<div class="slider-container">
+						<Slider
+							min="0"
+							max="3"
+							bind:value={eclIndex}
+							thumbcolor="currentColor"
+							trackcolor="var(--color-blue-200)"
+						/>
+					</div>
+					<input disabled class="number" value={ECLS[eclIndex]} />
+				</div>
+				<div class="field-toggle">
+					<SwitchCheckbox bind:checked={showEclIndex} />
 				</div>
 			</div>
 		</div>

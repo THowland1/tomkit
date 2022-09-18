@@ -13,7 +13,7 @@
 </script>
 
 <svelte:head>
-	<title>Home</title>
+	<title>QR Code Generator</title>
 	<meta name="description" content="Svelte demo app" />
 </svelte:head>
 <section class="section">
@@ -143,7 +143,7 @@
 	.form {
 		flex: 1;
 		padding-top: 16px;
-		padding-bottom: 16px;
+		padding-bottom: 48px;
 	}
 
 	.preview-container {
@@ -154,9 +154,6 @@
 		}
 	}
 	@media only screen and (max-width: 800px) {
-		.section {
-			padding-bottom: 100px;
-		}
 		.preview-container {
 			position: absolute;
 			margin: auto;
